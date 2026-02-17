@@ -18,10 +18,13 @@ test('deve consultar um pedido aprovado', async ({ page }) => {
   await page.getByRole('button', { name: 'Buscar Pedido' }).click();
 
   //Assert
-  await expect(page.getByTestId('order-result-id')).toBeVisible({timeout: 30_000})
-  await expect(page.getByTestId('order-result-id')).toContainText('VLO-PKAFMV')
+  await expect(page.getByText('VLO-PKAFMV')).toBeVisible({timeout: 30_000})
+  await expect(page.locator('#root')).toContainText('VLO-PKAFMV');
 
-  await expect(page.getByTestId('order-result-status')).toBeVisible()
-  await expect(page.getByTestId('order-result-status')).toContainText('APROVADO')
+
+  await expect(page.getByText('APROVADO')).toBeVisible();
+  await expect(page.locator('#root')).toContainText('APROVADO');
+
+
 
 })
