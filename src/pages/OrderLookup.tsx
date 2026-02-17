@@ -58,7 +58,7 @@ const OrderLookup = () => {
     }
     
     if (order) {
-      setSearchedOrder(order);
+        setSearchedOrder(order);
     } else {
       setNotFound(true);
     }
@@ -95,7 +95,6 @@ const OrderLookup = () => {
               </div>
               <Button
                 type="submit"
-                data-testid="search-order-button"
                 className="w-full"
                 disabled={!orderId.trim() || isLoading}
               >
