@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { TIMEOUT } from 'dns'
 
 ///AAA - Arrange, Act, Assert
 
@@ -15,11 +16,18 @@ test('deve consultar um pedido aprovado', async ({ page }) => {
   //await page.getByLabel('Número do Pedido').fill('VLO-PKAFMV');
   //await page.getByPlaceholder('Ex: VLO-ABC123').fill('VLO-PKAFMV')
 
-  await page.getByRole('button', { name: 'Buscar Pedido' }).click();
+  await page.getByRole('button', { name: 'Buscar Pedido' }).click()
 
  //Assert
- await expect(page.getByText('VLO-PKAFMV')).toBeVisible({timeout: 30_000})
- await expect(page.getByText('APROVADO')).toBeVisible({timeout: 30_000});
+ //const orderCode = page.locator('//p[text()="Pedido"]/..//p[text()="VLO-PKAFMV"]') - validação usando xpath puro
+ //await expect(orderCode).toBeVisible({timeout: 30_000})
+
+ const containerPedido = page.getByRole('paragraph')
+ .filter({ hasText: /^Pedido$/}) // = (/^ começa com) ($/ Termina com)Expresão regular para melhorar o criterio de filtragem
+ .locator('..')//sobe para o elemento pai (a div que agrupa ambos)
+ await expect(containerPedido).toContainText('VLO-PKAFMV', {timeout: 10_000})
+
+ await expect(page.getByText('APROVADO')).toBeVisible({timeout: 30_000})
 
 
 
