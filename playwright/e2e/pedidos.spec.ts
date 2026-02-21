@@ -78,13 +78,13 @@ test.describe('Consulta de Pedidos', ()=>{
           - paragraph: Email
           - paragraph: teste@teste.com.br
           - paragraph: Loja de Retirada
-          - paragraph
+          - paragraph Faria Lima Velo
           - paragraph: Data do Pedido
           - paragraph: /\\d+\\/\\d+\\/\\d+/
           - heading "Pagamento" [level=4]
           - paragraph: À Vista
           - paragraph: /R\\$ \\d+\\.\\d+,\\d+/
-          `);
+          `,{ timeout: 30_000 });
     
     })
     
