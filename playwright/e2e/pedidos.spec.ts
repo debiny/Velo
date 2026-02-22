@@ -178,6 +178,77 @@ test.describe('Consulta de Pedidos', () => {
 
   })
 
+  test('deve consultar um pedido em analise', async ({ page }) => {
+
+    //Test Data
+
+    //onst order = 'VLO-5NCPNL'
+    const order = {
+      number: 'VLO-EYYX6A',
+      status: 'EM_ANALISE',
+      color: 'Lunar White',
+      wheels: 'aero Wheels',
+      customer: {
+        name: 'Joao sa Silva',
+        email: 'joao@velo.dev'
+      },
+      payment: 'À Vista'
+
+
+    }
+
+
+    //Act
+    await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(order.number)
+    //await page.getByLabel('Número do Pedido').fill('VLO-PKAFMV');
+    //await page.getByPlaceholder('Ex: VLO-ABC123').fill('VLO-PKAFMV')
+
+    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+
+    //Assert
+    //const orderCode = page.locator('//p[text()="Pedido"]/..//p[text()="VLO-PKAFMV"]') - validação usando xpath puro
+    //await expect(orderCode).toBeVisible({timeout: 30_000})
+
+    // const containerPedido = page.getByRole('paragraph')
+    //     .filter({ hasText: /^Pedido$/ }) // = (/^ começa com) ($/ Termina com)Expresão regular para melhorar o criterio de filtragem
+    //     .locator('..')//sobe para o elemento pai (a div que agrupa ambos)
+    // await expect(containerPedido).toContainText(order, { timeout: 10_000 })
+
+    // await expect(page.getByText('APROVADO')).toBeVisible({ timeout: 30_000 })
+
+    //validação com snapshot
+    //` back tik - permite customizar expresoes reguralres e interpolar valores
+    await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
+      - img
+      - paragraph: Pedido
+      - paragraph: ${order.number}
+      - img
+      - text: ${order.status}
+      - img "Velô Sprint"
+      - paragraph: Modelo
+      - paragraph: Velô Sprint
+      - paragraph: Cor
+      - paragraph: ${order.color}
+      - paragraph: Interior
+      - paragraph: cream
+      - paragraph: Rodas
+      - paragraph: ${order.wheels}
+      - heading "Dados do Cliente" [level=4]
+      - paragraph: Nome
+      - paragraph: ${order.customer.name}
+      - paragraph: Email
+      - paragraph: ${order.customer.email}
+      - paragraph: Loja de Retirada
+      - paragraph
+      - paragraph: Data do Pedido
+      - paragraph: /\\d+\\/\\d+\\/\\d+/
+      - heading "Pagamento" [level=4]
+      - paragraph: ${order.payment}
+      - paragraph: /R\\$ \\d+\\.\\d+,\\d+/
+      `, );
+
+  })
+
   test('deve exibir mensagem quando o pedido não é encontrado', async ({ page }) => {
 
     const order = gerarCodigoPedido()
