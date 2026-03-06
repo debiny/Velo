@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
-import { gerarCodigoPedido } from '../suport/helpers'
-import { OrderLockupPage, OrderDetails } from '../suport/pages/OrderLockupPage'
+import { gerarCodigoPedido } from '../support/helpers'
+import { OrderLockupPage, OrderDetails } from '../support/pages/OrderLockupPage'
+import { LandingPage } from '../support/pages/LandingPage'
+import { Navbar } from '../support/pages/Navbar'
 
 
 
@@ -10,10 +12,11 @@ test.describe('Consulta de Pedidos', () => {
 
   test.beforeEach(async ({ page }) => {
     //roda antes de cada teste
-    await page.goto('http://localhost:5173/')
-    await expect(page.getByTestId('hero-section').getByRole('heading')).toContainText('Velô Sprint')
-    await page.getByRole('link', { name: 'Consultar Pedido' }).click()
-    await expect(page.getByRole('heading')).toContainText('Consultar Pedido')
+    const landingPage = new LandingPage(page)
+    await landingPage.goto()
+    const navbar = new Navbar(page)
+    await navbar.goToOrderLookup()
+    //await expect(page.getByRole('heading')).toContainText('Consultar Pedido')
   })
 
   test('deve consultar um pedido aprovado', async ({ page }) => {
@@ -75,8 +78,8 @@ test.describe('Consulta de Pedidos', () => {
     const statusBadge = page.getByRole('status').filter({ hasText: order.status }) //obtem o badge pelo valor do status
 
     // as barras são o Contain
-    await expect(statusBadge).toHaveClass(/bg-red-100/) //verfica se o fundo é verde claro
-    await expect(statusBadge).toHaveClass(/text-red-700/) //veifica a cor do texto
+    await expect(statusBadge).toHaveClass(/bg-red-100/) //verifica se o fundo é vermelho claro
+    await expect(statusBadge).toHaveClass(/text-red-700/) //verifica a cor do texto
 
     const statusIcon = statusBadge.locator('svg') //verifica o icone 
     expect(statusIcon).toHaveClass(/lucide lucide-circle-x/)
@@ -114,8 +117,8 @@ test.describe('Consulta de Pedidos', () => {
     const statusBadge = page.getByRole('status').filter({ hasText: order.status }) //obtem o badge pelo valor do status
 
     // as barras são o Contain
-    await expect(statusBadge).toHaveClass(/bg-amber-100/) //verfica se o fundo é verde claro
-    await expect(statusBadge).toHaveClass(/text-amber-700/) //veifica a cor do texto
+    await expect(statusBadge).toHaveClass(/bg-amber-100/) //verifica se o fundo é âmbar claro
+    await expect(statusBadge).toHaveClass(/text-amber-700/) //verifica a cor do texto
 
     const statusIcon = statusBadge.locator('svg') //verifica o icone 
     expect(statusIcon).toHaveClass(/lucide-clock-icon/)
@@ -129,10 +132,8 @@ test.describe('Consulta de Pedidos', () => {
     //Act
     const orderLockupPage = new OrderLockupPage(page)
 
-    await orderLockupPage.seachOrder(order
+    await orderLockupPage.seachOrder(order)
 
-    )
-   
     await orderLockupPage.validateOrderNotFound()
   })
 
