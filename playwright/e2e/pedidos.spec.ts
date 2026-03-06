@@ -16,7 +16,7 @@ test.describe('Consulta de Pedidos', () => {
     await landingPage.goto()
     const navbar = new Navbar(page)
     await navbar.goToOrderLookup()
-    //await expect(page.getByRole('heading')).toContainText('Consultar Pedido')
+    await expect(page.getByRole('heading')).toContainText('Consultar Pedido')
   })
 
   test('deve consultar um pedido aprovado', async ({ page }) => {
