@@ -15,7 +15,17 @@ export type OrderDetails = {
 };
 
 export function createOrderLookupActions(page: Page) {
+
+  const orderInput = page.getByRole('textbox', { name: 'Número do Pedido' })
+  const serachButton = page.getByRole('button', { name: 'Buscar Pedido' })
+
   return {
+
+    elements: {
+      orderInput,
+      serachButton
+
+    },
     async open() {
       await page.goto('/');
       const title = page.getByTestId('hero-section').getByRole('heading');
@@ -25,18 +35,13 @@ export function createOrderLookupActions(page: Page) {
     },
 
     async searchOrder(code: string) {
-      await page
-        .getByRole('textbox', { name: 'Número do Pedido' })
-        .fill(code);
-      await page
-        .getByRole('button', { name: 'Buscar Pedido' })
-        .click();
+      await orderInput.fill(code);
+      await serachButton.click();
     },
 
     async validateOrderDetails(order: OrderDetails) {
-      await expect(
-        page.getByTestId(`order-result-${order.number}`),
-      ).toMatchAriaSnapshot(`
+      const card = page.getByTestId(`order-result-${order.number}`);
+      await expect(card).toMatchAriaSnapshot(`
       - img
       - paragraph: Pedido
       - paragraph: ${order.number}
