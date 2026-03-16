@@ -17,15 +17,23 @@ export function createConfiguratorActions(page: Page) {
       await page.getByRole('button', { name: wheelsName }).click();
     },
 
-    async expectPrice(expected: string) {
+    async expectPrice(price: string) {
       const priceElement = page.getByTestId('total-price');
       await expect(priceElement).toBeVisible();
-      await expect(priceElement).toHaveText(expected)
+      await expect(priceElement).toHaveText(price)
     },
 
     async validateCarImage(expectedSrc: string) {
       const carImage = page.locator('img[alt^="Velô Sprint"]');
       await expect(carImage).toHaveAttribute('src', expectedSrc);
+    },
+
+    async toggleOptional(optionalName: string | RegExp) {
+      await page.getByRole('checkbox', { name: optionalName }).click();
+    },
+
+    async proceedToCheckout() {
+      await page.getByRole('button', { name: 'Monte o Seu' }).click();
     }
   };
 }
