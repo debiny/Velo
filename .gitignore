@@ -29,3 +29,12 @@ dist-ssr
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Ambiente e Segurança
+.env
+.env.*
+!.env.example
+
+# Arquivos de saída/temporários
+out.txt
+install.cmd

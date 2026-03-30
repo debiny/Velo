@@ -23,6 +23,7 @@ export function createConfiguratorActions(page: Page) {
       await expect(priceElement).toHaveText(price)
     },
 
+
     async validateCarImage(expectedSrc: string) {
       const carImage = page.locator('img[alt^="Velô Sprint"]');
       await expect(carImage).toHaveAttribute('src', expectedSrc);
@@ -32,8 +33,9 @@ export function createConfiguratorActions(page: Page) {
       await page.getByRole('checkbox', { name: optionalName }).click();
     },
 
-    async proceedToCheckout() {
+    async finishConfigurator() {
       await page.getByRole('button', { name: 'Monte o Seu' }).click();
-    }
+    },
+
   };
 }

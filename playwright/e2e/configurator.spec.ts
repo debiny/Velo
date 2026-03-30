@@ -42,9 +42,8 @@ test.describe('Configuração do veículo', () => {
     await app.configurator.toggleOptional('Precision Park')
     await app.configurator.toggleOptional('Flux Capacitor')
     await app.configurator.expectPrice('R$ 40.000,00')
+    await app.configurator.finishConfigurator()
 
-    await app.configurator.proceedToCheckout()
-
-    await app.configurator.validateRedirectToCheckout()
+    await app.checkout.validateRedirectToCheckout()
   })
 })
