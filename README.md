@@ -158,3 +158,6 @@ npm run dev      # Desenvolvimento
 npm run build    # Build de produção
 npm run lint     # Verificar código
 ```
+
+
+npx playwright test --ui

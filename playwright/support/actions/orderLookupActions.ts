@@ -10,20 +10,23 @@ export type OrderDetails = {
   customer: {
     name: string;
     email: string;
+    document: string;
+    phone: string;
   };
   payment: string;
+  total_price: string;
 };
 
 export function createOrderLookupActions(page: Page) {
 
   const orderInput = page.getByRole('textbox', { name: 'Número do Pedido' })
-  const serachButton = page.getByRole('button', { name: 'Buscar Pedido' })
+  const searchButton = page.getByRole('button', { name: 'Buscar Pedido' })
 
   return {
 
     elements: {
       orderInput,
-      serachButton
+      searchButton
 
     },
     async open() {
@@ -36,7 +39,7 @@ export function createOrderLookupActions(page: Page) {
 
     async searchOrder(code: string) {
       await orderInput.fill(code);
-      await serachButton.click();
+      await searchButton.click();
     },
 
     async validateOrderDetails(order: OrderDetails) {

@@ -4,7 +4,6 @@ import { createConfiguratorActions } from './actions/configuratorActions';
 import { createCheckoutActions } from './actions/checkoutActions';
 
 type App = {
-
   orderLookup: ReturnType<typeof createOrderLookupActions>;
   configurator: ReturnType<typeof createConfiguratorActions>;
   checkout: ReturnType<typeof createCheckoutActions>;
@@ -22,4 +21,3 @@ export const test = base.extend<{ app: App }>({
 });
 
 export { expect } from '@playwright/test';
-
