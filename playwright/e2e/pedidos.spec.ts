@@ -2,8 +2,7 @@ import { test, expect } from '../support/fixtures'
 import { generateOrderCode } from '../support/helpers'
 import type { OrderDetails } from '../support/actions/orderLookupActions'
 import { insertOrder, deleteOrderByNumber } from '../support/database/orderRepository'
-import {  } from "crypto";
-
+import testData from '../support/fixtures/orders.json' with { type: 'json' }
 
 test.describe('Consulta de Pedido', () => {
 
@@ -11,27 +10,10 @@ test.describe('Consulta de Pedido', () => {
     await app.orderLookup.open()
   })
 
-  // VLO-9X0H93
-
   test('deve consultar um pedido aprovado', async ({ app }) => {
-
-    const order: OrderDetails = {
-      number: 'VLO-9X0H93',
-      status: 'APROVADO',
-      color: 'Glacier Blue',
-      wheels: 'aero Wheels',
-      customer: {
-        name: 'Fernando Papito',
-        email: 'papito@velo.dev',
-        document: '780.228.290-05',
-        phone:'(11) 99999-9999',
-      },
-      payment: 'À Vista',
-      total_price: '40000',
-    }
+    const order = testData.aprovado as OrderDetails
 
     await deleteOrderByNumber(order.number)
-
     await insertOrder(order)
 
     await app.orderLookup.searchOrder(order.number)
@@ -40,24 +22,9 @@ test.describe('Consulta de Pedido', () => {
   })
 
   test('deve consultar um pedido reprovado', async ({ app }) => {
-
-    const order: OrderDetails = {
-      number: 'VLO-SE4R02',
-      status: 'REPROVADO',
-      color: 'Midnight Black',
-      wheels: 'sport Wheels',
-      customer: {
-        name: 'Steve Jobs',
-        email: 'jobs@apple.com',
-        document: '780.228.290-05',
-        phone:'(11) 99999-9999',
-      },
-      payment: 'À Vista',
-      total_price: '40000',
-    }
+    const order = testData.reprovado as OrderDetails
 
     await deleteOrderByNumber(order.number)
-
     await insertOrder(order)
 
     await app.orderLookup.searchOrder(order.number)
@@ -66,23 +33,9 @@ test.describe('Consulta de Pedido', () => {
   })
 
   test('deve consultar um pedido em analise', async ({ app }) => {
-    const order: OrderDetails = {
-      number: 'VLO-SE4R03',
-      status: 'EM_ANALISE',
-      color: 'Lunar White',
-      wheels: 'aero Wheels',
-      customer: {
-        name: 'João da Silva',
-        email: 'joao@velo.dev',
-        document: '780.228.290-05',
-        phone:'(11) 99999-9999',
-      },
-      payment: 'À Vista',
-      total_price: '40000',
-    }
+    const order = testData.em_analise as OrderDetails
 
     await deleteOrderByNumber(order.number)
-
     await insertOrder(order)
 
     await app.orderLookup.searchOrder(order.number)
