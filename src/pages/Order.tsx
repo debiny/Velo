@@ -58,12 +58,21 @@ const stores = [
   'Velô Ibirapuera - Av. Ibirapuera, 3000',
 ];
 
+function isValidCpf(value: string): boolean {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length !== 11 || /^(\d)\1{10}$/.test(digits)) return false;
+  const calc = (len: number) =>
+    digits.slice(0, len).split('').reduce((sum, d, i) => sum + Number(d) * (len + 1 - i), 0);
+  const mod = (n: number) => { const r = (n * 10) % 11; return r >= 10 ? 0 : r; };
+  return mod(calc(9)) === Number(digits[9]) && mod(calc(10)) === Number(digits[10]);
+}
+
 const orderSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
   surname: z.string().min(2, 'Sobrenome deve ter pelo menos 2 caracteres'),
   email: z.string().email('Email inválido'),
   phone: z.string().min(14, 'Telefone inválido'),
-  cpf: z.string().regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido'),
+  cpf: z.string().refine(isValidCpf, 'CPF inválido'),
   store: z.string().min(1, 'Selecione uma loja'),
   terms: z.boolean().refine((val) => val === true, 'Aceite os termos'),
 });
@@ -271,7 +280,7 @@ const Order = () => {
                       onChange={(e) => handleChange('name', e.target.value)}
                       className={cn(errors.name && 'border-destructive')}
                     />
-                    {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
+                    {errors.name && <p data-testid="error-name" className="text-sm text-destructive">{errors.name}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="surname">Sobrenome</Label>
@@ -282,7 +291,7 @@ const Order = () => {
                       onChange={(e) => handleChange('surname', e.target.value)}
                       className={cn(errors.surname && 'border-destructive')}
                     />
-                    {errors.surname && <p className="text-sm text-destructive">{errors.surname}</p>}
+                    {errors.surname && <p data-testid="error-lastname" className="text-sm text-destructive">{errors.surname}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
@@ -294,7 +303,7 @@ const Order = () => {
                       onChange={(e) => handleChange('email', e.target.value)}
                       className={cn(errors.email && 'border-destructive')}
                     />
-                    {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                    {errors.email && <p data-testid="error-email" className="text-sm text-destructive">{errors.email}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Telefone</Label>
@@ -312,7 +321,7 @@ const Order = () => {
                         />
                       )}
                     </InputMask>
-                    {errors.phone && <p className="text-sm text-destructive">{errors.phone}</p>}
+                    {errors.phone && <p data-testid="error-phone" className="text-sm text-destructive">{errors.phone}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="cpf">CPF</Label>
@@ -330,7 +339,7 @@ const Order = () => {
                         />
                       )}
                     </InputMask>
-                    {errors.cpf && <p className="text-sm text-destructive">{errors.cpf}</p>}
+                    {errors.cpf && <p data-testid="error-document" className="text-sm text-destructive">{errors.cpf}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="store">Loja para Retirada</Label>
@@ -353,7 +362,7 @@ const Order = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.store && <p className="text-sm text-destructive">{errors.store}</p>}
+                    {errors.store && <p data-testid="error-store" className="text-sm text-destructive">{errors.store}</p>}
                   </div>
                 </div>
               </section>
@@ -461,7 +470,7 @@ const Order = () => {
                         Política de Privacidade
                       </Link>
                     </Label>
-                    {errors.terms && <p className="text-sm text-destructive mt-1">{errors.terms}</p>}
+                    {errors.terms && <p data-testid="error-terms" className="text-sm text-destructive mt-1">{errors.terms}</p>}
                   </div>
                 </div>
               </section>
