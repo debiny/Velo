@@ -286,7 +286,7 @@ const Order = () => {
                     <Label htmlFor="surname">Sobrenome</Label>
                     <Input
                       id="surname"
-                      data-testid="checkout-surname"
+                      data-testid="checkout-lastname"
                       value={formData.surname}
                       onChange={(e) => handleChange('surname', e.target.value)}
                       className={cn(errors.surname && 'border-destructive')}
@@ -334,7 +334,7 @@ const Order = () => {
                         <Input
                           {...inputProps}
                           id="cpf"
-                          data-testid="checkout-cpf"
+                          data-testid="checkout-document"
                           className={cn(errors.cpf && 'border-destructive')}
                         />
                       )}

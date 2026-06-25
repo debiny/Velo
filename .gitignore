@@ -38,3 +38,6 @@ dist-ssr
 # Arquivos de saída/temporários
 out.txt
 install.cmd
+
+# Claude Code
+.claude/worktrees/
