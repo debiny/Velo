@@ -57,5 +57,13 @@ export function createCheckoutActions(page: Page) {
     async submit() {
       await page.getByRole('button', { name: 'Confirmar Pedido' }).click()
     },
+
+    async selectPaymentMethod(method: string) {
+      await page.getByTestId(`payment-${method}`).click()
+    },
+
+    async expectAvistaTotal(price: string) {
+      await expect(page.getByTestId('payment-avista')).toContainText(price)
+    },
   }
 }

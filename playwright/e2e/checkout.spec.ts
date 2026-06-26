@@ -1,18 +1,17 @@
 import { test, expect } from '../support/fixtures'
+import { deleteOrderByNumber } from '../support/database/orderRepository'
+import testData from '../support/fixtures/orders.json' with { type: 'json' }
 
 test.describe('Checkout', () => {
 
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/order')
-    await expect(page.getByRole('heading', { name: 'Finalizar Pedido' })).toBeVisible()
-  })
+
 
   test.describe('Validações de campos obrigatórios', () => {
-
-
     let alerts: any
+    test.beforeEach(async ({ page, app }) => {
+      await page.goto('/order')
+      await expect(page.getByRole('heading', { name: 'Finalizar Pedido' })).toBeVisible()
 
-    test.beforeEach(async ({ app }) => {
       alerts = app.checkout.elements.alerts
     })
 
@@ -119,5 +118,36 @@ test.describe('Checkout', () => {
       // Assert
       await expect(alerts.terms).toHaveText('Aceite os termos')
     })
+
+  })
+
+})
+
+test.describe('Fluxo Feliz - Pagamento à Vista', () => {
+
+  test('CT05 - deve criar pedido à vista com status APROVADO', async ({ app, page }) => {
+    const order = testData.e2e_aprovado
+
+    // Arrange: landing → configurador → checkout
+    await page.goto('/')
+    await page.getByTestId('hero-cta-primary').click()
+    await app.configurator.finishConfigurator()
+
+    // Act: preenche formulário
+    await app.checkout.fillCustomerlData(order.customer)
+    await app.checkout.selectStore(order.store)
+    await app.checkout.selectPaymentMethod(order.payment_method)
+    await app.checkout.expectSummaryTotal('R$ 40.000,00')
+    await app.checkout.expectAvistaTotal('R$ 40.000,00')
+    await app.checkout.acceptTerms()
+    await app.checkout.submit()
+
+    // Assert: página de confirmação
+    await expect(page).toHaveURL(/\/success/)
+    await app.success.expectOrderApproved()
+    await app.success.expectOrderNumberVisible()
+
+    const createdOrderNumber = await page.getByTestId('order-id').textContent()
+    await deleteOrderByNumber(createdOrderNumber!)
   })
 })

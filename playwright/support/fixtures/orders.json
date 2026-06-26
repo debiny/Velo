@@ -1,4 +1,17 @@
 {
+  "e2e_aprovado": {
+    "status": "APROVADO",
+    "customer": {
+      "name": "Joao",
+      "lastname": "Silveira",
+      "email": "joao@velo.dev",
+      "phone": "(11) 99999-9999",
+      "document": "00000014141"
+    },
+    "store": "Velô Paulista",
+    "payment_method": "avista",
+    "total_price": "40000"
+  },
   "aprovado": {
     "number": "VLO-SE4R01",
     "status": "APROVADO",
