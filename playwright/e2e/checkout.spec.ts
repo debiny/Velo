@@ -1,5 +1,5 @@
 import { test, expect } from '../support/fixtures'
-import { deleteOrderByNumber } from '../support/database/orderRepository'
+import { deleteOrderByEmail } from '../support/database/orderRepository'
 import testData from '../support/fixtures/orders.json' with { type: 'json' }
 
 test.describe('Checkout', () => {
@@ -128,6 +128,8 @@ test.describe('Fluxo Feliz - Pagamento à Vista', () => {
   test('CT05 - deve criar pedido à vista com status APROVADO', async ({ app, page }) => {
     const order = testData.e2e_aprovado
 
+    await deleteOrderByEmail(order.customer.email)
+
     // Arrange: landing → configurador → checkout
     await page.goto('/')
     await page.getByTestId('hero-cta-primary').click()
@@ -147,7 +149,6 @@ test.describe('Fluxo Feliz - Pagamento à Vista', () => {
     await app.success.expectOrderApproved()
     await app.success.expectOrderNumberVisible()
 
-    const createdOrderNumber = await page.getByTestId('order-id').textContent()
-    await deleteOrderByNumber(createdOrderNumber!)
+
   })
 })
