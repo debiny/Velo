@@ -53,5 +53,19 @@
     },
     "payment": "À Vista",
     "total_price": "40000"
+  },
+  "financiado_aprovado": {
+    "status": "APROVADO",
+    "customer": {
+      "name": "Steve",
+      "lastname": "Silveira",
+      "email": "stevewos@velo.com",
+      "phone": "(11) 99999-9999",
+      "document": "86859199830"
+    },
+    "store": "Velô Paulista",
+    "payment_method": "financiamento",
+    "total_price": "40000",
+    "total_price_financiado": "40800"
   }
 }

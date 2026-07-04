@@ -65,5 +65,8 @@ export function createCheckoutActions(page: Page) {
     async expectAvistaTotal(price: string) {
       await expect(page.getByTestId('payment-avista')).toContainText(price)
     },
+    async expectFinanciamentoTotal(price: string) {
+      await expect(page.getByTestId('payment-financiamento')).toContainText(price)
+    },
   }
 }

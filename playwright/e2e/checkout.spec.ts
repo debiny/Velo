@@ -123,7 +123,7 @@ test.describe('Checkout', () => {
 
 })
 
-test.describe('Fluxo Feliz - Pagamento à Vista', () => {
+test.describe('Pagamento e confirmação', () => {
 
   test('CT05 - deve criar pedido à vista com status APROVADO', async ({ app, page }) => {
     const order = testData.e2e_aprovado
@@ -141,6 +141,38 @@ test.describe('Fluxo Feliz - Pagamento à Vista', () => {
     await app.checkout.selectPaymentMethod(order.payment_method)
     await app.checkout.expectSummaryTotal('R$ 40.000,00')
     await app.checkout.expectAvistaTotal('R$ 40.000,00')
+    await app.checkout.acceptTerms()
+    await app.checkout.submit()
+
+    // Assert: página de confirmação
+    await expect(page).toHaveURL(/\/success/)
+    await app.success.expectOrderApproved()
+    await app.success.expectOrderNumberVisible()
+
+
+  })
+
+  test('deve aprovar automaticamente o crédito quando o score do CPF for maior que 700 no financiamento.', async ({ app, page }) => {
+    const order = testData.financiado_aprovado
+
+    await deleteOrderByEmail(order.customer.email)
+
+    //cria uma rota de interceptação de requisições
+    await page.route('**/functions/v1/credit-analysis', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'DONE', score: 710 }) });
+    })
+
+    // Arrange: landing → configurador → checkout
+    await page.goto('/')
+    await page.getByTestId('hero-cta-primary').click()
+    await app.configurator.finishConfigurator()
+
+    // Act: preenche formulário
+    await app.checkout.fillCustomerlData(order.customer)
+    await app.checkout.selectStore(order.store)
+    await app.checkout.selectPaymentMethod(order.payment_method)
+    // await app.checkout.expectSummaryTotal(order.total_price)
+    //await app.checkout.expectFinanciamentoTotal(order.total_price_financiado)
     await app.checkout.acceptTerms()
     await app.checkout.submit()
 
