@@ -6,6 +6,14 @@ export function createSuccessActions(page: Page) {
       await expect(page.getByTestId('success-status')).toHaveText('Pedido Aprovado!')
     },
 
+    async expectOrderAnalized() {
+      await expect(page.getByTestId('success-status')).toHaveText('Pedido Em Análise!')
+    },
+
+    async expectOrderInAnalysis() {
+      await expect(page.getByTestId('success-status')).toHaveText('Pedido em Análise!')
+    },
+
     async expectOrderNumberVisible() {
       await expect(page.getByTestId('order-id')).not.toBeEmpty()
     },

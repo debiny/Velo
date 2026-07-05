@@ -68,5 +68,9 @@ export function createCheckoutActions(page: Page) {
     async expectFinanciamentoTotal(price: string) {
       await expect(page.getByTestId('payment-financiamento')).toContainText(price)
     },
+    async validateRedirectToCheckout() {
+      await expect(page).toHaveURL(/\/order/)
+      await expect(page.getByRole('heading', { name: 'Finalizar Pedido' })).toBeVisible()
+    },
   }
 }

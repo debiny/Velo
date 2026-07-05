@@ -67,5 +67,19 @@
     "payment_method": "financiamento",
     "total_price": "40000",
     "total_price_financiado": "40800"
+  },
+  "financiado_analise": {
+    "status": "EM_ANALISE",
+    "customer": {
+      "name": "mario",
+      "lastname": "cardoso",
+      "email": "mario.cardoso@velo.com",
+      "phone": "(11) 99999-9999",
+      "document": "69337886529"
+    },
+    "store": "Velô Paulista",
+    "payment_method": "financiamento",
+    "total_price": "40000",
+    "total_price_financiado": "40800"
   }
 }
