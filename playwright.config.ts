@@ -50,8 +50,11 @@ export default defineConfig({
     actionTimeout: 5_000,
 
     // Tempo máximo para navegações como goto(), waitForURL()
+    // Aumentado de 10s para 30s: com fullyParallel + múltiplos workers, várias
+    // instâncias de browser navegam para o Vite dev server ao mesmo tempo, e a
+    // compilação sob demanda do dev server pode ultrapassar 10s sob essa carga.
     // Quando o valor é 0, herda o limite do timeout geral do teste
-    navigationTimeout: 10_000
+    navigationTimeout: 30_000
   },
 
   /* Configure projects for major browsers */

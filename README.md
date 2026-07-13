@@ -28,6 +28,53 @@ Uma SPA (Single Page Application) que permite:
 
 ## Instalação
 
+INSTALAÇÃO DO NODE
+Permite rodar o javascript fora do navegadr, react depende do node para rodar. React e feito em node. 
+
+https://nodejs.org/pt-br
+baixe uma versão pré-compilada do Node.js
+
+vai abrir uma janela
+tecla enter 
+yes
+
+tecla enter
+
+abre o terminal
+roda node -v
+npm -v
+
+abre o prompt como admin
+corepack enable
+
+abre o terminal normal
+yarn --version
+Yes
+yarn --version
+
+INSTALAR WINDOWS TERMINAL E GITBASH
+https://gitforwindows.org/
+Na instalação selecionar Add gitbash profile no Windows terminal
+abrir o Windows terminal , na setinha do lado da janela abrir configurações e definir perfil padrão Git bash
+
+GIT BASH
+cd /c/Projetos
+cd velo-v1
+
+BAIXAR O PROJETO
+https://www.dropbox.com/scl/fi/wmpmdncj7lta14ddwlnpc/velo-v1.zip?dl=0&e=1&rlkey=vqhxk691mcsgsxj5yhd1xzq0f&st=7967dcjw
+
+no terminal rodar 
+
+yarn install para instalar as dependências
+yarn dev - para subir o projeto
+
+
+
+
+
+
+
 ```bash
 # Instalar dependências
 yarn install
@@ -76,6 +123,12 @@ yarn supabase db push
 
 # Deploy das Edge Functions
 yarn supabase functions deploy
+```
+### Instalar o playwrite
+```
+npx playwright install
+npx playwright test --ui (abre a interface) 
+
 ```
 
 Pronto! O banco e as functions estarão configurados.
@@ -160,4 +213,4 @@ npm run lint     # Verificar código
 ```
 
 
-npx playwright test --ui
+

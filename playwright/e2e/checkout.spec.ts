@@ -9,7 +9,8 @@ test.describe('Checkout', () => {
   test.describe('Validações de campos obrigatórios', () => {
     let alerts: any
     test.beforeEach(async ({ page, app }) => {
-      await page.goto('/order')
+      await app.hero.clickPrimaryCta()
+      await app.configurator.finishConfigurator()
       await expect(page.getByRole('heading', { name: 'Finalizar Pedido' })).toBeVisible()
 
       alerts = app.checkout.elements.alerts
@@ -125,17 +126,20 @@ test.describe('Checkout', () => {
 
 test.describe('Pagamento e confirmação', () => {
 
-  test('CT05 - deve criar pedido à vista com status APROVADO', async ({ app, page }) => {
+  test.beforeEach(async ({ app }) => {
+    await app.hero.clickPrimaryCta()
+
+  })
+
+  test('CT05 - deve criar pedido à vista com status APROVADO', async ({ app }) => {
     const order = testData.e2e_aprovado
 
     await deleteOrderByEmail(order.customer.email)
 
-    // Arrange: landing → configurador → checkout
-    await page.goto('/')
-    await page.getByTestId('hero-cta-primary').click()
+    // Arrange
     await app.configurator.finishConfigurator()
 
-    // Act: preenche formulário
+    // Act
     await app.checkout.fillCustomerlData(order.customer)
     await app.checkout.selectStore(order.store)
     await app.checkout.selectPaymentMethod(order.payment_method)
@@ -145,31 +149,25 @@ test.describe('Pagamento e confirmação', () => {
     await app.checkout.submit()
 
     // Assert: página de confirmação
-    await expect(page).toHaveURL(/\/success/)
-    await app.success.expectOrderApproved()
-    await app.success.expectOrderNumberVisible()
+    await app.checkout.expectResult('Aprovado')
 
 
   })
 
-  test('deve aprovar automaticamente o crédito quando o score do CPF for maior que 700 no financiamento.', async ({ app, page }) => {
+  test('deve aprovar automaticamente o crédito quando o score do CPF for maior que 700 no financiamento.', async ({ app }) => {
     const order = testData.financiado_aprovado
 
     await deleteOrderByEmail(order.customer.email)
 
-    //cria uma rota de interceptação de requisições
-    await page.route('**/functions/v1/credit-analysis', async route => {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'DONE', score: 710 }) })
-    })
+    await app.mock.mockCreditAnalysis(710)
 
-    // Arrange: landing → configurador → checkout
-    await page.goto('/')
-    await page.getByTestId('hero-cta-primary').click()
+
+    // Arrange
     await app.configurator.finishConfigurator()
-
-    // Act: preenche formulário
     await app.checkout.fillCustomerlData(order.customer)
     await app.checkout.selectStore(order.store)
+
+    // Act
     await app.checkout.selectPaymentMethod(order.payment_method)
     // await app.checkout.expectSummaryTotal(order.total_price)
     //await app.checkout.expectFinanciamentoTotal(order.total_price_financiado)
@@ -177,30 +175,24 @@ test.describe('Pagamento e confirmação', () => {
     await app.checkout.submit()
 
     // Assert: página de confirmação
-    await expect(page).toHaveURL(/\/success/)
-    await app.success.expectOrderApproved()
-    await app.success.expectOrderNumberVisible()
+    await app.checkout.expectResult('Aprovado')
 
 
   })
 
-  test('deve cair em análise quando o score for entre 400 e 700 no financiamento.', async ({ app, page }) => {
+  test('deve cair em análise quando o score for entre 501 e 700 no financiamento.', async ({ app }) => {
     const order = testData.financiado_analise
 
     await deleteOrderByEmail(order.customer.email)
 
-    await page.route('**/functions/v1/credit-analysis', async route => {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ status: 'DONE', score: 600 }) })
-    })
+    await app.mock.mockCreditAnalysis(600)
 
-    // Arrange: landing → configurador → checkout
-    await page.goto('/')
-    await page.getByTestId('hero-cta-primary').click()
+    // Arrange
     await app.configurator.finishConfigurator()
-
-    // Act: preenche formulário
     await app.checkout.fillCustomerlData(order.customer)
     await app.checkout.selectStore(order.store)
+
+    // Act
     await app.checkout.selectPaymentMethod(order.payment_method)
     // await app.checkout.expectSummaryTotal(order.total_price)
     //await app.checkout.expectFinanciamentoTotal(order.total_price_financiado)
@@ -208,9 +200,108 @@ test.describe('Pagamento e confirmação', () => {
     await app.checkout.submit()
 
     // Assert: página de confirmação
-    await expect(page).toHaveURL(/\/success/)
-    await app.success.expectOrderInAnalysis()
-    await app.success.expectOrderNumberVisible()
+    await app.checkout.expectResult('em Análise')
+
+
+  })
+
+  test('CT08 - deve reprovar o crédito quando o score for menor ou igual a 500 no financiamento sem entrada', async ({ app }) => {
+    const order = testData.financiado_reprovado
+
+    await deleteOrderByEmail(order.customer.email)
+
+    await app.mock.mockCreditAnalysis(400)
+
+
+    // Arrange
+    await app.configurator.finishConfigurator()
+    await app.checkout.fillCustomerlData(order.customer)
+    await app.checkout.selectStore(order.store)
+
+    // Act 
+    await app.checkout.selectPaymentMethod(order.payment_method)
+    await app.checkout.acceptTerms()
+    await app.checkout.submit()
+
+    // Assert: página de confirmação
+    await app.checkout.expectResult('Reprovado')
+
+
+  })
+
+  test('CT08 - deve reprovar o crédito quando o score for menor ou igual a 500 no financiamento com entrada menor que 50%', async ({ app }) => {
+    const order = testData.financiado_reprovado_entrada_parcial
+
+    await deleteOrderByEmail(order.customer.email)
+
+    await app.mock.mockCreditAnalysis(410)
+
+
+    // Arrange
+    await app.configurator.finishConfigurator()
+    await app.checkout.fillCustomerlData(order.customer)
+    await app.checkout.selectStore(order.store)
+
+    // Act
+    await app.checkout.selectPaymentMethod(order.payment_method)
+    await app.checkout.fillEntryValue(order.entry_value)
+    await app.checkout.acceptTerms()
+    await app.checkout.submit()
+
+    // Assert: página de confirmação
+    await app.checkout.expectResult('Reprovado')
+
+
+  })
+
+  test(' deve aprovar o crédito quando o score for menor ou igual a 500 no financiamento com entrada igual a 50%', async ({ app }) => {
+    const order = testData.financiado_aprovado_entrada_igual_50
+
+    await deleteOrderByEmail(order.customer.email)
+
+    await app.mock.mockCreditAnalysis(450)
+
+
+    // Arrange
+    await app.configurator.finishConfigurator()
+
+    // Act
+    await app.checkout.fillCustomerlData(order.customer)
+    await app.checkout.selectStore(order.store)
+    await app.checkout.selectPaymentMethod(order.payment_method)
+    await app.checkout.fillEntryValue(order.entry_value)
+    await app.checkout.acceptTerms()
+    await app.checkout.submit()
+
+    // Assert: página de confirmação
+    await app.checkout.expectResult('Aprovado')
+
+
+
+  })
+
+  test(' deve aprovar o crédito quando o score for menor ou igual a 500 no financiamento com entrada maior que 50%', async ({ app }) => {
+    const order = testData.financiado_reprovado_entrada_maior_50
+
+    await deleteOrderByEmail(order.customer.email)
+
+    await app.mock.mockCreditAnalysis(350)
+
+
+    // Arrange
+    await app.configurator.finishConfigurator()
+    await app.checkout.fillCustomerlData(order.customer)
+    await app.checkout.selectStore(order.store)
+
+    // Act
+    await app.checkout.selectPaymentMethod(order.payment_method)
+    await app.checkout.fillEntryValue(order.entry_value)
+    await app.checkout.acceptTerms()
+    await app.checkout.submit()
+
+    // Assert: página de confirmação
+    await app.checkout.expectResult('Aprovado')
+
 
 
   })

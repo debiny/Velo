@@ -81,5 +81,64 @@
     "payment_method": "financiamento",
     "total_price": "40000",
     "total_price_financiado": "40800"
+  },
+  "financiado_reprovado": {
+    "status": "REPROVADO",
+    "customer": {
+      "name": "Carla",
+      "lastname": "Mendes",
+      "email": "carla.mendes@velo.com",
+      "phone": "(11) 99999-9999",
+      "document": "11144477735"
+    },
+    "store": "Velô Paulista",
+    "payment_method": "financiamento",
+    "total_price": "40000",
+    "total_price_financiado": "40800"
+  },
+  "financiado_reprovado_entrada_parcial": {
+    "status": "REPROVADO",
+    "customer": {
+      "name": "Ricardo",
+      "lastname": "Alves",
+      "email": "ricardo.alves@velo.com",
+      "phone": "(11) 99999-9999",
+      "document": "93975965002"
+    },
+    "store": "Velô Paulista",
+    "payment_method": "financiamento",
+    "entry_value": "10000",
+    "total_price": "40000",
+    "total_price_financiado": "40800"
+  },
+  "financiado_aprovado_entrada_igual_50": {
+    "status": "APROVADO",
+    "customer": {
+      "name": "Maria",
+      "lastname": "Silva",
+      "email": "maria.silva@velo.com",
+      "phone": "(11) 99999-9999",
+      "document": "751.649.170-50"
+    },
+    "store": "Velô Paulista",
+    "payment_method": "financiamento",
+    "entry_value": "20000",
+    "total_price": "40000",
+    "total_price_financiado": "40800"
+  },
+  "financiado_reprovado_entrada_maior_50": {
+    "status": "APROVADO",
+    "customer": {
+      "name": "Axl",
+      "lastname": "Rose",
+      "email": "axl.rose@velo.com",
+      "phone": "(11) 99999-9999",
+      "document": "556.435.080-44"
+    },
+    "store": "Velô Paulista",
+    "payment_method": "financiamento",
+    "entry_value": "25000",
+    "total_price": "40000",
+    "total_price_financiado": "40800"
   }
 }

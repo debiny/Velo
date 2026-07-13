@@ -62,6 +62,10 @@ export function createCheckoutActions(page: Page) {
       await page.getByTestId(`payment-${method}`).click()
     },
 
+    async fillEntryValue(value: string) {
+      await page.getByTestId('input-entry-value').fill(value)
+    },
+
     async expectAvistaTotal(price: string) {
       await expect(page.getByTestId('payment-avista')).toContainText(price)
     },
@@ -71,6 +75,10 @@ export function createCheckoutActions(page: Page) {
     async validateRedirectToCheckout() {
       await expect(page).toHaveURL(/\/order/)
       await expect(page.getByRole('heading', { name: 'Finalizar Pedido' })).toBeVisible()
+    },
+    async expectResult(status: string) {
+      await expect(page).toHaveURL(/\/success/)
+      await expect(page.getByRole('heading', { name: status })).toBeVisible()
     },
   }
 }
