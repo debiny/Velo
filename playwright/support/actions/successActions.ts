@@ -15,7 +15,7 @@ export function createSuccessActions(page: Page) {
     },
 
     async expectOrderRejected() {
-      await expect(page.getByTestId('success-status')).toHaveText('Crédito Reprovado')
+      await expect(page.getByTestId('success-status')).toHaveText('Pedido Reprovado!')
     },
 
     async expectOrderNumberVisible() {

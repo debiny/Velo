@@ -51,7 +51,7 @@ const Success = () => {
       <Link to="/" className="mb-8">
         <img src={logo} alt="Velô" className="h-8" />
       </Link>
-      
+
       <div className="w-full max-w-2xl bg-card rounded-lg shadow-elegant-lg p-8 animate-scale-in">
         {/* Status Icon */}
         <div className="flex justify-center mb-6">
@@ -79,7 +79,7 @@ const Success = () => {
               isApproved ? 'text-success' : isPending ? 'text-warning' : 'text-destructive'
             )}
           >
-            {isApproved ? 'Pedido Aprovado!' : isPending ? 'Pedido em Análise!' : 'Crédito Reprovado'}
+            {isApproved ? 'Pedido Aprovado!' : isPending ? 'Pedido em Análise!' : 'Pedido Reprovado!'}
           </h1>
           <p className="text-muted-foreground">
             {isApproved
