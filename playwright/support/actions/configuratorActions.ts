@@ -26,7 +26,9 @@ export function createConfiguratorActions(page: Page) {
 
     async validateCarImage(expectedFileName: string) {
       const carImage = page.locator('img[alt^="Velô Sprint"]');
-      await expect(carImage).toHaveAttribute('src', new RegExp(`${expectedFileName}$`));
+      const [name, ext] = expectedFileName.split(/\.(?=[^.]+$)/);
+      // Build de produção adiciona um hash de conteúdo ao nome do arquivo (ex.: nome-CHoKSgfP.png)
+      await expect(carImage).toHaveAttribute('src', new RegExp(`${name}(-[\\w-]+)?\\.${ext}$`));
     },
 
     async toggleOptional(optionalName: string | RegExp) {
