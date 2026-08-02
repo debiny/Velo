@@ -215,9 +215,97 @@ npm run lint     # Verificar código
 ## Comandos
 
 ```bash
-yarn  dev      # Sobre a aplicação em desenvolvimentio
-yarn test #roda os testes unitários
-yarn playwright test # executa os testes e já sobe a aplicação pois isso esta configurado no playwright.config
-yarn playwright test --ui  #sobre a aplicação do playwright
+yarn dev      # Sobe a aplicação em desenvolvimento
+yarn test     # Roda os testes unitários
+yarn build    # Gera o pacote de produção na pasta dist
 ```
 
+## Playwright
+
+```bash
+# Instalar os navegadores usados pelo Playwright (só na primeira vez)
+npx playwright install
+
+# Rodar todos os testes e2e (já sobe a aplicação, conforme configurado no playwright.config)
+npx playwright test
+
+# Rodar com a interface visual (ver os testes passo a passo)
+npx playwright test --ui
+
+# Rodar com o navegador visível (sem headless)
+npx playwright test --headed
+
+# Rodar um arquivo de teste específico
+npx playwright test playwright/e2e/configurator.spec.ts
+
+# Rodar em modo debug (pausa e permite inspecionar cada passo)
+npx playwright test --debug
+
+# Gravar um teste navegando manualmente (gera o código automaticamente)
+npx playwright codegen http://localhost:5173
+
+# Abrir o relatório HTML da última execução
+npx playwright show-report
+```
+
+## Git
+
+### Fluxo para subir alterações (do dia a dia)
+
+```bash
+# 1. Criar uma branch nova a partir da main (só na primeira vez da tarefa)
+git checkout main
+git pull
+git checkout -b nome-da-branch
+
+# 2. Ver o que foi alterado/criado
+git status
+git diff
+
+# 3. Adicionar os arquivos que vão para o commit
+git add caminho/do/arquivo
+# ou, para adicionar tudo que foi alterado:
+git add .
+
+# 4. Criar o commit com uma mensagem
+git commit -m "mensagem do commit"
+
+# 5. Enviar os commits para o repositório remoto (primeira vez na branch)
+git push -u origin nome-da-branch
+# nas próximas vezes, com a branch já configurada, basta:
+git push
+```
+
+### Trazer a branch atualizada com a main / mergear
+
+```bash
+# Atualizar a main local com o remoto
+git checkout main
+git pull
+
+# Voltar para a sua branch e trazer as novidades da main para dentro dela
+git checkout nome-da-branch
+git merge main
+
+# Se preferir abrir Pull Request no GitHub em vez de merge local (recomendado):
+# 1. Suba a branch com "git push -u origin nome-da-branch"
+# 2. Abra o Pull Request no GitHub da sua branch para a main
+# 3. Após aprovado, faça o merge por lá
+
+# Depois do merge, se quiser apagar a branch que não é mais usada:
+git branch -d nome-da-branch          # local
+git push origin --delete nome-da-branch  # remota
+```
+
+### Outros comandos úteis
+
+```bash
+# Ver o histórico de commits (resumido)
+git log --oneline
+
+# Trocar de branch já existente
+git checkout nome-da-branch
+
+# Descartar alterações locais de um arquivo (não commitadas)
+git checkout -- caminho/do/arquivo
+```
