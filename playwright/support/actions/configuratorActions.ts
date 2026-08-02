@@ -24,9 +24,9 @@ export function createConfiguratorActions(page: Page) {
     },
 
 
-    async validateCarImage(expectedSrc: string) {
+    async validateCarImage(expectedFileName: string) {
       const carImage = page.locator('img[alt^="Velô Sprint"]');
-      await expect(carImage).toHaveAttribute('src', expectedSrc);
+      await expect(carImage).toHaveAttribute('src', new RegExp(`${expectedFileName}$`));
     },
 
     async toggleOptional(optionalName: string | RegExp) {

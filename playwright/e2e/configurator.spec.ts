@@ -12,7 +12,7 @@ test.describe('Configuração do veículo', () => {
     await app.configurator.selectColor('Midnight Black')
 
     await app.configurator.expectPrice('R$ 40.000,00')
-    await app.configurator.validateCarImage('/src/assets/midnight-black-aero-wheels.png')
+    await app.configurator.validateCarImage('midnight-black-aero-wheels.png')
   })
 
   test('deve atualizar o preço e a imagem do veículo ao alterar o tipo de roda', async ({ app }) => {
@@ -21,13 +21,13 @@ test.describe('Configuração do veículo', () => {
     await app.configurator.selectWheels(/Sport Wheels/i)
 
     await app.configurator.expectPrice('R$ 42.000,00')
-    await app.configurator.validateCarImage('/src/assets/glacier-blue-sport-wheels.png')
+    await app.configurator.validateCarImage('glacier-blue-sport-wheels.png')
 
     await app.configurator.selectWheels(/Aero Wheels/i)
 
     await app.configurator.expectPrice('R$ 40.000,00')
 
-    await app.configurator.validateCarImage('/src/assets/glacier-blue-aero-wheels.png')
+    await app.configurator.validateCarImage('glacier-blue-aero-wheels.png')
   })
 
   test('CT03 - deve atualizar o preço dinamicamente ao selecionar opcionais e prosseguir para checkout', async ({ app, page }) => {

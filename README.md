@@ -212,5 +212,12 @@ npm run build    # Build de produção
 npm run lint     # Verificar código
 ```
 
+## Comandos
 
+```bash
+yarn  dev      # Sobre a aplicação em desenvolvimentio
+yarn test #roda os testes unitários
+yarn playwright test # executa os testes e já sobe a aplicação pois isso esta configurado no playwright.config
+yarn playwright test --ui  #sobre a aplicação do playwright
+```
 
