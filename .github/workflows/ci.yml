@@ -1,5 +1,4 @@
-# Workflow de Integração Contínua focado em execução de testes unitários
-# Estrutura preparada para expansão futura (novos jobs, stages, etc.)
+# Workflow de Integração Contínua focado em execução de testes unitários e deploy de preview no Vercel
 
 name: Continuous Deployment
 
@@ -10,7 +9,8 @@ on:
 env:
   NODE_VERSION: '24'
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-  VERCEL_SCOPE: debiny1
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || 'team_jhfps5M5IICJECQEk9QQug9m' }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || 'prj_iSREsgwNAslY7NkNMTadpijbvlAm' }}
 
 jobs:
   unit-tests:
@@ -20,11 +20,11 @@ jobs:
     steps:
       # 1. Faz checkout do código do repositório
       - name: Checkout repository
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@v4
 
       # 2. Configura o ambiente Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v6.5.0
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -39,18 +39,19 @@ jobs:
       # 5. Executa os testes unitários com Vitest
       - name: Run unit tests
         run: yarn test
+
   build-and-deploy:
-    name: Buil & Deploy Vercel Preview
+    name: Build & Deploy Vercel Preview
     needs: [unit-tests]
     runs-on: ubuntu-latest
     steps:
       # 1. Faz checkout do código do repositório
       - name: Checkout repository
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@v4
 
       # 2. Configura o ambiente Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v6.5.0
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -62,17 +63,14 @@ jobs:
       - name: Install dependencies
         run: yarn install
       
-      #5. Buil para o Vercel
+      # 5. Baixa as configurações do ambiente Vercel
+      - name: Pull Vercel Environment Information
+        run: yarn vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+
+      # 6. Build para o Vercel
       - name: Build Vercel
         run: yarn vercel build --token=$VERCEL_TOKEN
 
-      #6. Deploy preview
-      - name: Deploy Preview no vercel
-        run: yarn vercel deploy --prebuilt --target=preview --token=$VERCEL_TOKEN --scope=$VERCEL_SCOPE
-
-        
-
-  
-  
-     
-      
+      # 7. Deploy preview
+      - name: Deploy Preview no Vercel
+        run: yarn vercel deploy --prebuilt --target=preview --token=$VERCEL_TOKEN
