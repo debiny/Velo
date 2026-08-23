@@ -296,6 +296,8 @@ git merge main
 git branch -d nome-da-branch          # local
 git push origin --delete nome-da-branch  # remota
 ```
+git reset --soft HEAD~1  # para apagar o ultimo commit mas manter os arquivos
+git checkout -- nome-da-branch #apaga os arquivos modificados
 
 ### Outros comandos úteis
 
