@@ -9,8 +9,8 @@ on:
 env:
   NODE_VERSION: '24'
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || 'team_jhfps5M5IICJECQEk9QQug9m' }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || 'prj_iSREsgwNAslY7NkNMTadpijbvlAm' }}
+  VERCEL_ORG_ID: team_jhfps5M5IICJECQEk9QQug9m
+  VERCEL_PROJECT_ID: prj_iSREsgwNAslY7NkNMTadpijbvlAm
 
 jobs:
   unit-tests:
@@ -65,7 +65,7 @@ jobs:
       
       # 5. Baixa as configurações do ambiente Vercel
       - name: Pull Vercel Environment Information
-        run: yarn vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+        run: yarn vercel pull --yes --environment=preview --token=$VERCEL_TOKEN --debug
 
       # 6. Build para o Vercel
       - name: Build Vercel
