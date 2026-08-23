@@ -229,6 +229,18 @@ npx playwright install
 # Rodar todos os testes e2e (já sobe a aplicação, conforme configurado no playwright.config)
 npx playwright test
 
+# Executar os testes unitários
+yarn test
+
+# Executar os testes E2E localmente (localhost:5173)
+yarn playwright test
+
+# Executar os testes E2E na URL de preview da Vercel (sem sujar o terminal)
+npx cross-env BASE_URL="https://velo-3jpciamix-debiny1.vercel.app" yarn playwright test
+
+# Caso tenha usado $env:BASE_URL no PowerShell e queira voltar ao localhost:
+Remove-Item env:BASE_URL
+
 # Rodar com a interface visual (ver os testes passo a passo)
 npx playwright test --ui
 
@@ -310,4 +322,16 @@ git checkout nome-da-branch
 
 # Descartar alterações locais de um arquivo (não commitadas)
 git checkout -- caminho/do/arquivo
+```
+
+### Outros comandos úteis
+
+``` Executar os testes no amboente local
+ yarn playwright test
+```
+``` Executar os testes passando a url de preview
+$env:BASE_URL="https://velo-3jpciamix-debiny1.vercel.app"; yarn playwright test
+```
+``` Para rodar os testes unitarios 
+yarn test
 ```
