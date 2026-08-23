@@ -9,6 +9,7 @@ on:
 env:
   NODE_VERSION: '24'
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_SCOPE: debiny1
   VERCEL_ORG_ID: team_jhfps5M5IICJECQEk9QQug9m
   VERCEL_PROJECT_ID: prj_iSREsgwNAslY7NkNMTadpijbvlAm
 
@@ -65,12 +66,16 @@ jobs:
       
       # 5. Baixa as configurações do ambiente Vercel
       - name: Pull Vercel Environment Information
-        run: yarn vercel pull --yes --environment=preview --token=$VERCEL_TOKEN --debug
+        run: yarn vercel pull --yes --environment=preview --token=$VERCEL_TOKEN --debug --scope=$VERCEL_SCOPE
 
-      # 6. Build para o Vercel
+      # 6. Obtém as credenciais do Vercel
+      - name: Pull Vercel Config
+        run: yarn vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+
+      # 7. Build para o Vercel
       - name: Build Vercel
         run: yarn vercel build --token=$VERCEL_TOKEN
 
-      # 7. Deploy preview
+      # 8. Deploy preview
       - name: Deploy Preview no Vercel
         run: yarn vercel deploy --prebuilt --target=preview --token=$VERCEL_TOKEN
