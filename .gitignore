@@ -48,4 +48,4 @@ install.cmd
 
 
 # supabase temp
-supabase/.temp/*    
+supabase/.temp/*
