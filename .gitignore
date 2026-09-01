@@ -46,3 +46,6 @@ install.cmd
 .env*
 .vercel
 
+
+# supabase temp
+supabase/.temp/*    
