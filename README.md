@@ -335,3 +335,7 @@ $env:BASE_URL="https://velo-3jpciamix-debiny1.vercel.app"; yarn playwright test
 ``` Para rodar os testes unitarios 
 yarn test
 ```
+
+publicar no testdino 
+
+$env:TESTDINO_TOKEN="td_api_afd0b0580e586b2329ac5242769d5df92f2f5e8bbcb239bf3bd85cc467d7048f"; yarn playwright test
