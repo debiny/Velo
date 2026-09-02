@@ -133,6 +133,14 @@ npx playwright test --ui (abre a interface)
 
 Pronto! O banco e as functions estarão configurados.
 
+### 4. Ambiente de Preview (Banco Isolado)
+
+Para rodar os testes E2E isolados (sem afetar dados de produção), é necessário um **segundo projeto Supabase**.
+1. Crie um novo projeto no Supabase (ex: `velo-sprint-preview`) e faça os deploys de banco/functions.
+2. Na **Vercel**, deixe as chaves `VITE_SUPABASE_*` de Produção ativas apenas no ambiente `Production`.
+3. Adicione as novas chaves `VITE_SUPABASE_*` do banco novo apenas no ambiente `Preview`.
+4. No **Github Actions**, crie uma secret `DATABASE_URL` contendo a Connection String (`postgresql://...`) do banco de Preview para os testes Playwright rodarem com segurança.
+
 ---
 
 ## Estrutura Principal
@@ -336,6 +344,12 @@ $env:BASE_URL="https://velo-3jpciamix-debiny1.vercel.app"; yarn playwright test
 yarn test
 ```
 
-publicar no testdino 
+### Publicar relatórios no TestDino (Localmente)
 
-$env:TESTDINO_TOKEN="td_api_afd0b0580e586b2329ac5242769d5df92f2f5e8bbcb239bf3bd85cc467d7048f"; yarn playwright test
+Para rodar os testes na sua máquina e publicar o relatório no TestDino, você precisa injetar o token no terminal (exemplo em PowerShell):
+
+```powershell
+$env:TESTDINO_TOKEN="cole_seu_token_aqui_com_aspas"; yarn playwright test
+```
+
+> **Atenção (Pipeline):** Para que a integração com o TestDino funcione na nuvem (Github Actions), certifique-se de ir nas configurações do seu repositório no Github (Settings > Secrets and variables > Actions) e criar uma secret chamada `TD_TOKEN` com o seu token válido (sem aspas).
