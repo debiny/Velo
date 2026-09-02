@@ -124,6 +124,7 @@ jobs:
       # 8. Publicar report JSON do TestDino
       - name: Publish Testdino Report
         if: ${{ !cancelled() }}
+        continue-on-error: true
         run: npx tdpw upload ./playwright-report --token=${{ secrets.TD_TOKEN }}
 
   promote:
